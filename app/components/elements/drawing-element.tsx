@@ -5,7 +5,7 @@ interface DrawingElementProps {
 }
 
 export function DrawingElement({ element }: DrawingElementProps) {
-  const { pathData, strokeColor, strokeWidth } = element.properties
+  const { pathData, strokeColor, strokeWidth, drawingTool, opacity = 1 } = element.properties
 
   return (
     <svg width="100%" height="100%" viewBox={`0 0 ${element.width} ${element.height}`}>
@@ -16,6 +16,8 @@ export function DrawingElement({ element }: DrawingElementProps) {
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
+        opacity={opacity}
+        filter={drawingTool === "brush" ? `drop-shadow(0 0 ${strokeWidth / 2}px ${strokeColor})` : "none"}
       />
     </svg>
   )

@@ -16,6 +16,7 @@ export function Toolbar() {
       width: 200,
       height: 50,
       zIndex: 0,
+      opacity: 1, // Add opacity
       properties: {
         text: "New Text",
         fontSize: 16,
@@ -49,6 +50,7 @@ export function Toolbar() {
               width: 200,
               height: 150,
               zIndex: 0,
+              opacity: 1,
               properties: {
                 src: e.target?.result as string,
               },
@@ -77,6 +79,7 @@ export function Toolbar() {
       width: 100,
       height: 50,
       zIndex: 0,
+      opacity: 1, // Add opacity
       properties: {
         borderColor: "#000000",
         backgroundColor: "transparent",
@@ -95,10 +98,13 @@ export function Toolbar() {
       width: 100,
       height: 100,
       zIndex: 0,
+      opacity: 1, // Add opacity
       properties: {
         shapeType,
         backgroundColor: "#ffffff",
+        backgroundOpacity: 1, // Add background opacity
         borderColor: "#000000",
+        borderWidth: 2, // Add border width
       },
     }
     dispatch({ type: "ADD_ELEMENT", element })

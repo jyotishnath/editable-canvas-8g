@@ -11,6 +11,7 @@ export interface CanvasElement {
   width: number
   height: number
   zIndex: number
+  opacity: number // Add opacity property
   properties: any
 }
 
@@ -64,7 +65,7 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
       const newStateAdd = saveToHistory(state)
       return {
         ...newStateAdd,
-        elements: [...newStateAdd.elements, { ...action.element, zIndex: newStateAdd.nextZIndex }],
+        elements: [...newStateAdd.elements, { ...action.element, zIndex: newStateAdd.nextZIndex, opacity: 1 }],
         nextZIndex: newStateAdd.nextZIndex + 1,
       }
 
@@ -73,6 +74,7 @@ function canvasReducer(state: CanvasState, action: CanvasAction): CanvasState {
       const elementsWithZIndex = action.elements.map((el, index) => ({
         ...el,
         zIndex: newStateMultiple.nextZIndex + index,
+        opacity: 1,
       }))
       return {
         ...newStateMultiple,

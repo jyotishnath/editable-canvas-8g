@@ -112,6 +112,7 @@ export function DraggableElement({ element, isSelected, onContextMenu }: Draggab
         width: element.width,
         height: element.height,
         zIndex: element.zIndex,
+        opacity: element.opacity, // Add opacity styling
       }}
       onMouseDown={handleMouseDown}
       onContextMenu={onContextMenu}

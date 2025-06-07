@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Trash2 } from "lucide-react"
+import { Trash2, Palette } from "lucide-react"
 
 export function PropertyPanel() {
   const { state, dispatch } = useCanvas()
@@ -22,6 +22,15 @@ export function PropertyPanel() {
           [property]: value,
         },
       },
+    })
+  }
+
+  const updateElementOpacity = (opacity: number) => {
+    if (!selectedElement) return
+    dispatch({
+      type: "UPDATE_ELEMENT",
+      id: selectedElement.id,
+      updates: { opacity },
     })
   }
 
@@ -91,6 +100,21 @@ export function PropertyPanel() {
           </div>
 
           <div className="space-y-4">
+            {/* Universal Opacity Control */}
+            <div>
+              <Label htmlFor="element-opacity">Opacity: {Math.round((selectedElement.opacity || 1) * 100)}%</Label>
+              <Input
+                id="element-opacity"
+                type="range"
+                min="0.1"
+                max="1"
+                step="0.1"
+                value={selectedElement.opacity || 1}
+                onChange={(e) => updateElementOpacity(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
             {selectedElement.type === "text" && (
               <>
                 <div>
@@ -188,11 +212,31 @@ export function PropertyPanel() {
               <>
                 <div>
                   <Label htmlFor="shape-bg-color">Background Color</Label>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      id="shape-bg-color"
+                      type="color"
+                      value={selectedElement.properties.backgroundColor}
+                      onChange={(e) => updateElementProperty("backgroundColor", e.target.value)}
+                      className="flex-1"
+                    />
+                    <Palette className="w-4 h-4 text-gray-500" />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="shape-bg-opacity">
+                    Background Opacity: {Math.round((selectedElement.properties.backgroundOpacity || 1) * 100)}%
+                  </Label>
                   <Input
-                    id="shape-bg-color"
-                    type="color"
-                    value={selectedElement.properties.backgroundColor}
-                    onChange={(e) => updateElementProperty("backgroundColor", e.target.value)}
+                    id="shape-bg-opacity"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={selectedElement.properties.backgroundOpacity || 1}
+                    onChange={(e) => updateElementProperty("backgroundOpacity", Number(e.target.value))}
+                    className="w-full"
                   />
                 </div>
 
@@ -205,6 +249,21 @@ export function PropertyPanel() {
                     onChange={(e) => updateElementProperty("borderColor", e.target.value)}
                   />
                 </div>
+
+                <div>
+                  <Label htmlFor="shape-border-width">
+                    Border Width: {selectedElement.properties.borderWidth || 2}px
+                  </Label>
+                  <Input
+                    id="shape-border-width"
+                    type="range"
+                    min="0"
+                    max="20"
+                    value={selectedElement.properties.borderWidth || 2}
+                    onChange={(e) => updateElementProperty("borderWidth", Number(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
               </>
             )}
 
@@ -212,24 +271,33 @@ export function PropertyPanel() {
               <>
                 <div>
                   <Label htmlFor="stroke-color">Stroke Color</Label>
-                  <Input
-                    id="stroke-color"
-                    type="color"
-                    value={selectedElement.properties.strokeColor}
-                    onChange={(e) => updateElementProperty("strokeColor", e.target.value)}
-                  />
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      id="stroke-color"
+                      type="color"
+                      value={selectedElement.properties.strokeColor}
+                      onChange={(e) => updateElementProperty("strokeColor", e.target.value)}
+                      className="flex-1"
+                    />
+                    <Palette className="w-4 h-4 text-gray-500" />
+                  </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="stroke-width">Stroke Width</Label>
+                  <Label htmlFor="stroke-width">Stroke Width: {selectedElement.properties.strokeWidth}px</Label>
                   <Input
                     id="stroke-width"
-                    type="number"
+                    type="range"
                     min="1"
-                    max="20"
+                    max="50"
                     value={selectedElement.properties.strokeWidth}
                     onChange={(e) => updateElementProperty("strokeWidth", Number.parseInt(e.target.value))}
+                    className="w-full"
                   />
+                </div>
+
+                <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                  <strong>Tool:</strong> {selectedElement.properties.drawingTool === "pencil" ? "Pencil" : "Brush"}
                 </div>
               </>
             )}

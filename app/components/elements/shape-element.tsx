@@ -5,12 +5,21 @@ interface ShapeElementProps {
 }
 
 export function ShapeElement({ element }: ShapeElementProps) {
-  const { shapeType, backgroundColor, borderColor } = element.properties
+  const { shapeType, backgroundColor, backgroundOpacity = 1, borderColor, borderWidth = 2 } = element.properties
 
   const renderShape = () => {
+    // Convert hex color to rgba for opacity support
+    const hexToRgba = (hex: string, opacity: number) => {
+      const r = Number.parseInt(hex.slice(1, 3), 16)
+      const g = Number.parseInt(hex.slice(3, 5), 16)
+      const b = Number.parseInt(hex.slice(5, 7), 16)
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`
+    }
+
     const style = {
-      backgroundColor,
-      border: `2px solid ${borderColor}`,
+      backgroundColor:
+        backgroundColor === "transparent" ? "transparent" : hexToRgba(backgroundColor, backgroundOpacity),
+      border: `${borderWidth}px solid ${borderColor}`,
       width: "100%",
       height: "100%",
     }
@@ -28,8 +37,9 @@ export function ShapeElement({ element }: ShapeElementProps) {
             <div
               style={{
                 width: "100%",
-                height: "2px",
+                height: `${borderWidth}px`,
                 backgroundColor: borderColor,
+                opacity: backgroundOpacity,
               }}
             />
           </div>
